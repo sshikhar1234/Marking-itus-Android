@@ -1,0 +1,113 @@
+// This #include statement was automatically added by the Particle IDE.
+#include <InternetButton.h>
+
+InternetButton Button = InternetButton();
+int counter = 0;
+
+void setup() {
+    Button.begin();
+    Particle.function("resetAll",resetAll);
+    Particle.function("Smile6",Smile6);
+    Particle.function("Smile4",Smile4);
+    Particle.function("Smile3",Smile3);
+    Particle.function("Smile2",Smile2);
+    Particle.function("Smile1",Smile1);
+    Particle.function("Anger1",Anger1);
+    Particle.function("Anger2",Anger2);
+}
+
+void loop() {
+
+}
+
+int resetAll(String cmd){
+    Button.allLedsOff();
+}
+
+int Smile6(String cmd){
+Button.ledOn(4,0,255,0);
+Button.ledOn(5,0,255,0);
+Button.ledOn(6,0,255,0);
+Button.ledOn(7,0,255,0);
+Button.ledOn(8,0,255,0);
+Button.ledOn(10,0,255,0);
+Button.ledOn(2,0,255,0);
+
+}
+
+int Smile4(String cmd){
+    Button.ledOff(3);
+Button.ledOn(4,0,255,0);
+Button.ledOn(5,0,255,0);
+Button.ledOn(6,0,255,0);
+Button.ledOn(7,0,255,0);
+Button.ledOn(8,0,255,0);
+    Button.ledOff(9);
+Button.ledOn(10,0,255,0);
+Button.ledOn(2,0,255,0);
+}
+
+int Smile3(String cmd){
+    Button.ledOff(3);
+    Button.ledOff(4);
+Button.ledOn(5,0,255,0);
+Button.ledOn(6,0,255,0);
+Button.ledOn(7,0,255,0);
+    Button.ledOff(8);
+    Button.ledOff(9);
+    Button.ledOn(10,0,255,0);
+Button.ledOn(2,0,255,0);
+
+}
+
+int Smile2(String cmd){
+    Button.ledOff(3);
+    Button.ledOff(4);
+    Button.ledOff(5);
+Button.ledOn(6,0,255,0);
+    Button.ledOff(7);
+    Button.ledOff(8);
+    Button.ledOff(9);
+    Button.ledOn(10,0,255,0);
+Button.ledOn(2,0,255,0);
+
+}
+int Smile1(String cmd){
+    Button.ledOff(3);
+    Button.ledOff(4);
+    Button.ledOff(5);
+    Button.ledOff(6);
+    Button.ledOff(7);
+    Button.ledOff(8);
+    Button.ledOff(9);
+    Button.ledOff(10);
+    Button.ledOff(2);
+    
+}
+int Anger1(String cmd)
+{
+        Button.ledOff(3);
+    Button.ledOff(4);
+    Button.ledOff(5);
+Button.ledOn(6,255,0,0);
+    Button.ledOff(7);
+    Button.ledOff(8);
+    Button.ledOff(9);
+Button.ledOn(10,255,0,0);
+Button.ledOn(2,255,0,0);
+
+
+}
+int Anger2(String cmd)
+{
+        Button.ledOff(3);
+    Button.ledOff(4);
+Button.ledOn(5,255,0,0);
+Button.ledOn(6,255,0,0);
+Button.ledOn(7,255,0,0);
+Button.ledOn(10,255,0,0);
+Button.ledOn(2,255,0,0);
+    Button.ledOff(8);
+    Button.ledOff(9);
+
+}
