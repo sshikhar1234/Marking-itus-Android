@@ -139,54 +139,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUIandCallFunction() {
-        counter = counter + 1;
-        tvTimer.setText("Time: "+this.counter);
-        if(isBetween(counter,0,2))
-        {
-            callParticleFunction("Smile6");
+        if(counter>=0 && counter<=20) {
+
+            counter = counter + 1;
+            tvTimer.setText("Time: " + this.counter);
+            if (isBetween(counter, 0, 2)) {
+                callParticleFunction("Smile6");
 //Smile6
-        }
-        if(isBetween(counter,3,5))
-        {
+            }
+            if (isBetween(counter, 3, 5)) {
 //Smile4
-            Log.d(TAG, "decreaseTimer: 4");
-            callParticleFunction("Smile4");
+                Log.d(TAG, "decreaseTimer: 4");
+                callParticleFunction("Smile4");
 
-        }
-        if(isBetween(counter,6,8))
-        {
+            }
+            if (isBetween(counter, 6, 8)) {
 //Smile3
-            Log.d(TAG, "decreaseTimer: 3");
-            callParticleFunction("Smile3");
+                Log.d(TAG, "decreaseTimer: 3");
+                callParticleFunction("Smile3");
 
-        }
-        if(isBetween(counter,9,11))
-        {
+            }
+            if (isBetween(counter, 9, 11)) {
 //Smile2
-            Log.d(TAG, "decreaseTimer: 2");
+                Log.d(TAG, "decreaseTimer: 2");
 
-            callParticleFunction("Smile2");
-        }
-        if(isBetween(counter,12,14))
-        {
+                callParticleFunction("Smile2");
+            }
+            if (isBetween(counter, 12, 14)) {
 //Smile1
-            callParticleFunction("Smile1");
-        }
-        if(isBetween(counter,15,17))
-        {
+                callParticleFunction("Smile1");
+            }
+            if (isBetween(counter, 15, 17)) {
 //anger1
-            callParticleFunction("Anger1");
-        }
-        else
-        if(isBetween(counter,18,20))
-        {
+                callParticleFunction("Anger1");
+            } else if (isBetween(counter, 18, 20)) {
 //anger2
-            callParticleFunction("Anger2");
+                callParticleFunction("Anger2");
 
-        }
-        else
-        if(counter == 0){
-            callParticleFunction("reset");
+            } else if (counter == 0) {
+                callParticleFunction("reset");
+            }
         }
 
     }
@@ -194,14 +186,13 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.button)
     public void onViewClicked() {
         Log.d(TAG, "onViewClicked: ");
-        started = true;
         periodicUpdate  = () -> {
-            if(started){
-                childHandler.postDelayed(periodicUpdate, 1000);
-                updateUIandCallFunction();
-            }
+            Log.d(TAG, "insideHandler: ");
+            updateUIandCallFunction();
             childHandler.postDelayed(periodicUpdate,UPDATE_TIME_PERIOD);
         };
+        childHandler.postDelayed(periodicUpdate,UPDATE_TIME_PERIOD);
+
     }
 
 
