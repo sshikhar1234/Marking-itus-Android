@@ -3,6 +3,7 @@ package project.university.marking_itus_android;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -29,15 +30,15 @@ public class MainActivity extends AppCompatActivity {
 
     int counter = 0;
     String TAG = "Tag";
-    int currentProgress = 0;
-    int prevProgress = 0;
 
-    int UPDATE_TIME_PERIOD = 2000;
+    int UPDATE_TIME_PERIOD = 1000;
 
     // MARK: Particle device-specific info
     private final String PARTICLE_USERNAME = "sshikharshah@gmail.com";
     private final String PARTICLE_PASSWORD = "Particle_2022";
     private final String DEVICE_ID = "3e0031001447363333343437";
+    @BindView(R.id.btnRestart)
+    Button btnRestart;
     private ParticleDevice mDevice;
 
     //Setup background thread for updating time
@@ -63,10 +64,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        // 1. Initialize your connection to the Particle API
         ParticleCloudSDK.init(this);
 
-        // 2. Setup your device variable
         getDeviceFromCloud();
         appCompatSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -83,13 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                    int i = seekBar.getProgress();
-                    Log.d(TAG, "onStopTrackingTouch: progress "+ seekBar.getProgress());
-                    UPDATE_TIME_PERIOD = 2000+i;
-                    slowDownTime.setText(String.format("Time slows down by : %d miliseconds", i));
-                    Log.d(TAG, "onStopTrackingTouch: new update time "+ UPDATE_TIME_PERIOD);
-                    //Add new callback with updated interval time
-                    childHandler.postDelayed(periodicUpdate, UPDATE_TIME_PERIOD);
+                int i = seekBar.getProgress();
+                Log.d(TAG, "onStopTrackingTouch: progress " + seekBar.getProgress());
+                UPDATE_TIME_PERIOD = 2000 + i;
+                slowDownTime.setText(String.format("Time slows down by : %d miliseconds", i));
+                Log.d(TAG, "onStopTrackingTouch: new update time " + UPDATE_TIME_PERIOD);
+
+                //Add new callback with updated interval time
+                childHandler.postDelayed(periodicUpdate, UPDATE_TIME_PERIOD);
             }
         });
     }
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         return lower <= x && x <= upper;
     }
 
-    //Function to
     public void getDeviceFromCloud() {
         Async.executeAsync(ParticleCloudSDK.getCloud(), new Async.ApiWork<ParticleCloud, Object>() {
 
@@ -121,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //Function to call Particle's Exposed Function
     private void callParticleFunction(final String functionName) throws RejectedExecutionException {
         try {
 
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (RejectedExecutionException e) {
-            Log.d(TAG, "callParticleFunction: "+e.getLocalizedMessage());
+            Log.d(TAG, "callParticleFunction: " + e.getLocalizedMessage());
         }
     }
 
@@ -160,8 +158,7 @@ public class MainActivity extends AppCompatActivity {
         if (counter >= 0 && counter < 20) {
 
             counter = counter + 1;
-            textViewTimerUpdate.setText(""+counter);
-//            textViewTimer.setText(this.counter);
+            textViewTimerUpdate.setText("" + counter);
             if (isBetween(counter, 0, 2)) {
                 callParticleFunction("Smile6");
 //Smile6
@@ -188,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
 //Smile1
                 callParticleFunction("Smile1");
             }
-            if (isBetween(counter, 16, 17)) {
+            if (isBetween(counter, 16, 18)) {
 //anger1
                 callParticleFunction("Anger1");
-            } else if (isBetween(counter, 18, 19)) {
+            } else if (isBetween(counter, 19, 20)) {
 //anger2
                 callParticleFunction("Anger2");
 
@@ -200,25 +197,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (counter == 20) {
-            callParticleFunction("resetAll");
+    }
+
+    @OnClick({R.id.button, R.id.btnRestart})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.button:
+                Log.d(TAG, "onViewClicked: ");
+                periodicUpdate = () -> {
+                    Log.d(TAG, "insideHandler: ");
+                    updateUIandCallFunction();
+                    childHandler.postDelayed(periodicUpdate, UPDATE_TIME_PERIOD);
+                    textViewTimerUpdate = findViewById(R.id.textViewTimerUpdate);
+                };
+                childHandler.postDelayed(periodicUpdate, UPDATE_TIME_PERIOD);
+
+                break;
+            case R.id.btnRestart:
+                counter =0;
+                childHandler.removeCallbacksAndMessages(null);
+                appCompatSeekBar.setProgress(0);
+                slowDownTime.setText(String.format("Time slows down by :"));
+                textViewTimerUpdate.setText(""+counter);
+                callParticleFunction("resetAll");
+                break;
         }
     }
-
-    @OnClick(R.id.button)
-    public void onViewClicked() {
-        Log.d(TAG, "onViewClicked: ");
-        periodicUpdate = () -> {
-            Log.d(TAG, "insideHandler: ");
-            updateUIandCallFunction();
-            childHandler.postDelayed(periodicUpdate, UPDATE_TIME_PERIOD);
-            textViewTimerUpdate = findViewById(R.id.textViewTimerUpdate);
-//            Log.d(TAG, "onViewClicked: "+textViewTimerUpdate.setText("as"););
-           // textViewTimerUpdate.setText(" "+counter);
-        };
-        childHandler.postDelayed(periodicUpdate, UPDATE_TIME_PERIOD);
-
-    }
-
-
 }
