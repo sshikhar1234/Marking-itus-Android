@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUIandCallFunction() {
-        if(counter>=0 && counter<=20) {
+        if(counter>=0 && counter<20) {
 
             counter = counter + 1;
             tvTimer.setText("Time: " + this.counter);
@@ -159,20 +159,20 @@ public class MainActivity extends AppCompatActivity {
                 callParticleFunction("Smile3");
 
             }
-            if (isBetween(counter, 9, 11)) {
+            if (isBetween(counter, 9, 13)) {
 //Smile2
                 Log.d(TAG, "decreaseTimer: 2");
 
                 callParticleFunction("Smile2");
             }
-            if (isBetween(counter, 12, 14)) {
+            if (isBetween(counter, 14, 15)) {
 //Smile1
                 callParticleFunction("Smile1");
             }
-            if (isBetween(counter, 15, 17)) {
+            if (isBetween(counter, 16, 17)) {
 //anger1
                 callParticleFunction("Anger1");
-            } else if (isBetween(counter, 18, 20)) {
+            } else if (isBetween(counter, 18, 19    )) {
 //anger2
                 callParticleFunction("Anger2");
 
@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        if(counter == 20){
+            callParticleFunction("resetAll");
+        }
     }
 
     @OnClick(R.id.button)
